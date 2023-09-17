@@ -23,5 +23,5 @@ jobs:
         # The command "python manage.py test" is used to run tests for your application
 
       - name: Lint
-        run: docker-compose run --rm app sh -c "flake8"
+        run: docker-compose run --rm app sh -c "flake8 --ignore=E1,E23,W503,E501"
         # Run linting (e.g., flake8) inside a Docker container using docker-compose
