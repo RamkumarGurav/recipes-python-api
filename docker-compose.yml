@@ -12,7 +12,26 @@ services:
       - ./app:/app
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASSWORD=changeme
+    depends_on:
+      - db
 
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - dev-db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
+
+volumes:
+  dev-db-data:
+  dev-static-data:
 # This is a Docker Compose configuration file (docker-compose.yml) written in version 3.9, which is used to define and manage multi-container Docker applications. In this file, there is a single service defined named "app." Let's break down what each section does:
 
 # version: "3.9": Specifies the version of the Docker Compose file format being used. In this case, it's version 3.9.

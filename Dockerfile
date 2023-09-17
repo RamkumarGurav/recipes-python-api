@@ -28,8 +28,12 @@ ARG DEV=false
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     /py/bin/pip install -r /temp/requirements.txt && \
+    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .temp-build-deps \
+    build-base postgresql-dev musl-dev && \
     if [ "$DEV" = "true" ]; then /py/bin/pip install -r /temp/requirements.dev.txt; fi && \
-    rm -rf /tmp
+    rm -rf /tmp && \
+    apk del .temp-build-deps
 #RUN python -m venv /py && \
 # This line creates a Python virtual environment named /py within the Docker container. A virtual environment is a self-contained Python environment that allows you to manage dependencies separately for your project.
 # python -m venv /py uses the venv module to create the virtual environment at the /py directory.
