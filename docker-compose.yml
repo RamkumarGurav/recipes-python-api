@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - DEV=true
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+
+# This is a Docker Compose configuration file (docker-compose.yml) written in version 3.9, which is used to define and manage multi-container Docker applications. In this file, there is a single service defined named "app." Let's break down what each section does:
+
+# version: "3.9": Specifies the version of the Docker Compose file format being used. In this case, it's version 3.9.
+
+# services: This is where you define the different services (containers) for your application.
+
+# app: This is the name of the service/container.
+
+# build: Specifies the build configuration for the service.
+
+# context: .: Indicates that the Docker build context is the current directory (where the docker-compose.yml file is located). This is typically where your Dockerfile resides.
+# ports: Maps container ports to host ports.
+
+# "8000:8000": This line maps port 8000 in the container to port 8000 on the host machine. This allows you to access the application running inside the container on your host machine's port 8000.
+
+# volumes: Mounts host directories or volumes into the container.
+# ./app on the left side of the colon (:): This represents a path on the host machine. In this case, it points to a directory named "app" located in the current working directory where your docker-compose.yml file is located. This is typically a relative path, but you can specify an absolute path as well.
+
+# /app on the right side of the colon (:): This represents a path inside the container. It specifies the location where the contents of the host directory will be mounted into the container. In this case, it's the "/app" directory within the container.
+
+# So, what this volume mapping does is it takes the contents of the ./app directory on your host machine and makes them available inside the container at the /app path. This is often used for sharing code, configuration files, or other data between the host and the container.
+
+# For example, if you have your Django application code in the ./app directory on your host machine, using this volume mapping allows you to make changes to the code on your host machine, and those changes will be reflected immediately inside the running container. This is especially useful during development because it enables you to have live code reloading without having to rebuild the Docker image every time you make a code change.
+
+# ./app:/app: This line mounts the ./app directory from your host machine into the /app directory within the container. This is commonly used for development purposes to allow live code reloading.
+# command: Specifies the command to run when the container starts.
+
+# sh -c "python manage.py runserver 0.0.0.0:8000": This command runs a shell (sh) with the provided Python command. It starts the Django development server (manage.py runserver) and binds it to IP address 0.0.0.0 and port 8000. The 0.0.0.0 means that the server will be accessible from outside the container.
+# In summary, this Docker Compose configuration defines a single service called "app" that builds an image based on the Dockerfile in the current directory. It maps port 8000 from the container to port 8000 on the host machine, mounts the local ./app directory into the container's /app directory for code sharing, and runs a Django development server when the container starts

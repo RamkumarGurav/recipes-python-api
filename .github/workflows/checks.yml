@@ -1,0 +1,30 @@
+---
+name: Checks # Define the name of the GitHub Actions workflow
+
+on: [push] # Trigger the workflow when a push event occurs
+
+jobs:
+  test-lint:
+    name: Test and Lint # Name of the job
+    runs-on: ubuntu-20.04 # Use the "ubuntu-20.04" runner (GitHub-hosted runner) for job execution
+
+    steps: # List of steps to be executed in this job
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1 # Use the "docker/login-action" action from the GitHub Marketplace
+
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }} # Provide the Docker Hub username stored as a secret
+          password: ${{ secrets.DOCKERHUB_TOKEN }} # Provide the Docker Hub token (authentication) stored as a secret
+
+      - name: Checkout
+        uses: actions/checkout@v2 # Use the "actions/checkout" action to checkout the repository's code
+
+      - name: Test
+        run: docker-compose run --rm app sh -c "python manage.py test"
+        # Run tests inside a Docker container using docker-compose
+        # The "--rm" flag removes the container after the command is executed
+        # The command "python manage.py test" is used to run tests for your application
+
+      - name: Lint
+        run: docker-compose run --rm app sh -c "flake8"
+        # Run linting (e.g., flake8) inside a Docker container using docker-compose
