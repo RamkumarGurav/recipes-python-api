@@ -11,14 +11,11 @@ jobs:
     steps: # List of steps to be executed in this job
       - name: Login to Docker Hub
         uses: docker/login-action@v1 # Use the "docker/login-action" action from the GitHub Marketplace
-
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }} # Provide the Docker Hub username stored as a secret
           password: ${{ secrets.DOCKERHUB_TOKEN }} # Provide the Docker Hub token (authentication) stored as a secret
-
       - name: Checkout
         uses: actions/checkout@v2 # Use the "actions/checkout" action to checkout the repository's code
-
       - name: Test
         run: docker-compose run --rm app sh -c "python manage.py test"
         # Run tests inside a Docker container using docker-compose
